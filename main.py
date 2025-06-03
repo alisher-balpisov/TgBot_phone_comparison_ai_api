@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.INFO)
 # Инициализация OpenAI клиента для OpenRouter
 client = OpenAI(
     base_url="https://openrouter.ai/api/v1",
-    api_key='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'
+    api_key='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'
 )
 
 # Инициализация бота
@@ -51,7 +51,7 @@ async def compare_phones(message: types.Message):
                     "X-Title": "Phone Comparison Bot",
                 },
                 extra_body={},
-                model="google/gemini-2.0-flash-exp:free",
+                model="deepseek/deepseek-chat-v3-0324:free",
                 messages=[
                     {
                         "role": "user",
@@ -60,7 +60,7 @@ async def compare_phones(message: types.Message):
 2. Укажи сильные и слабые стороны каждого.
 3. Структурируй в виде списков, можно использовать emoji (✔️, ❌, 🔋 и т.п.).
 4. Сделай вывод: какой телефон лучше и кому подойдёт.
-⚠️ Не используй кавычки ("", '', «», „“ и т.п.) вообще — ни в названиях, ни в заголовках.
+⚠️ Не используй кавычки ("", '', *, #, «», „“ и т.п.) вообще — ни в названиях, ни в заголовках.
 Пиши как Telegram-сообщение: с простыми заголовками, списками, без форматирования Markdown или HTML.
 Язык — русский. Стиль — простой и понятный, без перегруженности терминами."""
                     }
@@ -68,9 +68,11 @@ async def compare_phones(message: types.Message):
             )
 
             response = completion.choices[0].message.content
-            cleaned = response.replace('"', '').replace("«", "").replace("»", "").replace("“", "").replace("”",
-                                                                                                           "").replace(
-                "‘", "").replace("’", "")
+            cleaned = (response.replace('"', '').replace("«", "").replace
+                       ("»", "").replace("“", "").replace("”", "").replace(
+                "‘", "").replace("’", "").replace("###", "").
+                       replace("####", "").replace("**", ""))
+
             # Разбиваем длинный ответ на части
             for i in range(0, len(response), 4096):
                 await message.reply(response[i:i + 4096])
