@@ -1,2 +1,2 @@
 tg_token = '7444635527:AAHNhNJ_GMMcj64k0so9UOkeW4LwneoMKgI'
-api_key='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'
+api_key = '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'
