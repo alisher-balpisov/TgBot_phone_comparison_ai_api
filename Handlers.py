@@ -8,7 +8,7 @@ router = Router()
 
 
 @router.message(Command("start"))
-async def send_welcome(message: Message):
+async def cmd_start(message: Message):
     await message.reply("Привет! Я бот для сравнения характеристик телефонов. "
                         "Напиши мне названия двух телефонов, например: 'iPhone 14 и Galaxy S23', "
                         "и я сравню их характеристики, плюсы и минусы.")
