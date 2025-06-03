@@ -8,23 +8,21 @@ router = Router()
 
 
 @router.message(Command("start"))
-async def send_welcome(message: Message):
+async def cmd_start(message: Message):
     await message.reply("Привет! Я бот для сравнения характеристик телефонов. "
                         "Напиши мне названия двух телефонов, например: 'iPhone 14 и Galaxy S23', "
                         "и я сравню их характеристики, плюсы и минусы.")
 
 
-# Обработчик текстовых сообщений
 @router.message()
 async def compare_phones(message: Message):
     user_input = message.text
 
-    # Проверяем, содержит ли сообщение ключевые слова для сравнения
     if " и " in user_input.lower() or " vs " in user_input.lower():
         await message.reply("Сравниваю телефоны, пожалуйста подождите...")
 
         try:
-            # Запрос к OpenRouter API
+
             prompt = client.chat.completions.create(
                 model="deepseek/deepseek-chat-v3-0324:free",
                 messages=[{
@@ -47,7 +45,6 @@ async def compare_phones(message: Message):
                 "‘", "").replace("’", "").replace("###", "").
                        replace("####", "").replace("**", "").replace("#", ""))
 
-            # Разбиваем длинный ответ на части
             for i in range(0, len(cleaned), 4096):
                 await message.answer(cleaned[i:i + 4096])
 
